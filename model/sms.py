@@ -14,6 +14,8 @@ class Sms(Base):
     id = Column(Integer, primary_key=True)
     from_contact_id = Column(Integer, ForeignKey('contact.id'))
     from_contact = relationship('Contact', backref='sms')
+    #to_contact_id = Column(Integer, ForeignKey('contact.id'))
+    #to_contact = relationship('Contact', backref='sms')
                              
     content = Column(String(500))
     # TODO create_at

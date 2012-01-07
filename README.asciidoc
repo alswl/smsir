@@ -1,0 +1,17 @@
+== SMSIR ==
+
+Smsir is a console helper to manage message backups.
+
+== Install ==
+
+Require:
+
+* Python2.x
+* Sqlalchemy
+* pyyaml
+
+== Usage ==
+
+// TODO
+
+// vim: set ft=asciidoc:

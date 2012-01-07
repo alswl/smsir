@@ -12,8 +12,7 @@ class Contact(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), nullable=False)
-
-    #sms = relationship("Sms", order_by='Sms.id', backref='contact')
+    phone = Column(Integer(20), nullable=False)
 
     def __init__(self, name):
         self.name = name
