@@ -7,10 +7,10 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
 import yaml
 
-from model.meta import Base, session, engine
+from config import Base, session, engine
 from model.sms import Sms
 from model.contact import Contact
-import parser.textparser
+from parser.best_message_storer_parser import Best_message_storer_parser
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +21,6 @@ class Smsir(object):
         self.Base = Base
         self.session = session
         self.engine = engine
-
-        # Loging
-        config = yaml.load(open('config.yml', 'r'))
-        logging.config.dictConfig(config)
 
     def run(self):
         parser = argparse.ArgumentParser(
@@ -51,20 +47,19 @@ class Smsir(object):
         elif args.list_messages:
             self.list_messages()
         elif args.import_sms_backup_restore != None:
-            self.import_sms_backup_restore(args.import_sms_backup_restore.read())
+            pass
         elif args.import_best_message_storer != None:
-            self.import_best_message_storer(args.import_best_message_storer.read())
+            best_message_storer_parser = Best_message_storer_parser(
+                args.import_best_message_storer.read().decode('utf-16le')
+                )
+            smses = best_message_storer_parser.parse()
+            session.add_all(smses)
+            session.commit()
         else:
             parser.print_help()
 
     def create_all(self):
         self.Base.metadata.create_all(self.engine)
-
-    def import_from_xml(self):
-        pass
-
-    def import_from_txt(self):
-        pass
 
     def list_messages(self):
         print 'messages'
@@ -77,9 +72,7 @@ class Smsir(object):
         textparser.parse(texts)
 
     def test(self):
-        sms = Sms()
-        sms.from_contact = Contact(u'路飞')
-        sms.add()
+        pass
 
 def main():
     smsir = Smsir()

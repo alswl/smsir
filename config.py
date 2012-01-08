@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 
 config = yaml.load(open('config.yml', 'r'))
 
-engine = create_engine(config['data'], echo=True) # set data connect string
+engine = create_engine(config['main']['data'], echo=True) # set data connect string
 
 # SQLAlchemy session manager. Updated by model.init_model()
 Session = scoped_session(sessionmaker())

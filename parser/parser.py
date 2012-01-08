@@ -5,16 +5,16 @@
 # author: alswl
 # date: 2011-01-07
 
-from sms import Sms
+from model.sms import Sms
 
-class TextParser(object):
+class Parser(object):
     def __init__(self):
         pass
 
     def parse(self, text):
-        sms = Sms()
-        for block in text.split('================================' \
-                                '======================================'):
-            print line
-
         pass
+
+class IllegalFormatError(ValueError):
+    """非法格式"""
+    pass
+
