@@ -59,6 +59,7 @@ class Smsir(object):
             parser.print_help()
 
     def create_all(self):
+        self.Base.metadata.drop_all(checkfirst=True, bind=session.bind)
         self.Base.metadata.create_all(self.engine)
 
     def list_messages(self):

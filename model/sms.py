@@ -12,6 +12,15 @@ class Sms(Base):
     __tablename__ = 'sms'
 
     id = Column(Integer, primary_key=True)
+    content = Column(String(500))
+    type = Column(Integer, nullable=False) # sms type: 1=inbox, 2=sendbox
+    create_at = Column(TIMESTAMP)
+    number = Column(String(20), nullable=False)
+    phone_id = Column(Integer, ForeignKey('phone.id'))
+    phone = relationship(
+        'Phone',
+        primaryjoin='Phone.id == Sms.phone_id',
+        )
     from_contact_id = Column(Integer, ForeignKey('contact.id'))
     to_contact_id = Column(Integer, ForeignKey('contact.id'))
     from_contact = relationship(
@@ -22,14 +31,14 @@ class Sms(Base):
         'Contact',
         primaryjoin='Contact.id == Sms.to_contact_id',
         )
-                             
-    content = Column(String(500))
-    create_at = Column(TIMESTAMP)
 
     def __init__(self, from_contact=None, to_contact=None):
         self.from_contact = from_contact
         self.to_contact = to_contact
 
-    def add(self):
-        session.add(self)
-        session.commit()
+    def update_contact(self, name):
+        """update the number / contact info of sms"""
+        contact = Session.query(Contact).filter_by(name=name).first()
+        if contact == None:
+            contact = Contact(name)
+        phone = Session.query(Phone).filter_by(number=self.number).first()

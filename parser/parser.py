@@ -14,7 +14,7 @@ class Parser(object):
     def parse(self, text):
         pass
 
-class IllegalFormatError(ValueError):
+class FormatError(ValueError):
     """非法格式"""
     pass
 
