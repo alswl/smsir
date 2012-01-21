@@ -21,16 +21,8 @@ class Sms(Base):
         'Phone',
         primaryjoin='Phone.id == Sms.phone_id',
         )
-    from_contact_id = Column(Integer, ForeignKey('contact.id'))
-    to_contact_id = Column(Integer, ForeignKey('contact.id'))
-    from_contact = relationship(
-        'Contact',
-        primaryjoin='Contact.id == Sms.from_contact_id',
-        )
-    to_contact = relationship(
-        'Contact',
-        primaryjoin='Contact.id == Sms.to_contact_id',
-        )
+    contact_id = Column(Integer, ForeignKey('contact.id'))
+    contact = relationship('Contact', backref='sms')
 
     def __init__(self, from_contact=None, to_contact=None):
         self.from_contact = from_contact

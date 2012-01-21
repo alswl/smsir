@@ -16,8 +16,6 @@ class Phone(Base):
     id = Column(Integer, primary_key=True)
     number = Column(String(20), nullable=False)
     contact_id = Column(Integer, ForeignKey('contact.id'))
-    #contact = relationship('Contact',
-                           #primaryjoin='Contact.id == Phone.contact_id')
     create_at = Column(TIMESTAMP)
 
     def __init__(self, number=None):

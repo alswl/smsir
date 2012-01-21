@@ -39,6 +39,7 @@ class Smsir(object):
         parser.add_argument('--import-best-message-storer', '-B',
                             type=argparse.FileType('r'),
                             metavar='FILE',
+                            nargs='+',
                             help='import messages from Best MessageStorer backups')
         args = parser.parse_args()
 
@@ -49,12 +50,14 @@ class Smsir(object):
         elif args.import_sms_backup_restore != None:
             pass
         elif args.import_best_message_storer != None:
-            best_message_storer_parser = Best_message_storer_parser(
-                args.import_best_message_storer.read().decode('utf-16le')
-                )
-            smses = best_message_storer_parser.parse()
-            session.add_all(smses)
-            session.commit()
+            for text in args.import_best_message_storer:
+                best_message_storer_parser = Best_message_storer_parser(
+                    text.read().decode('utf-16le')
+                    )
+                smses = best_message_storer_parser.parse()
+                session.add_all(smses)
+                session.commit()
+                best_message_storer_parser.print_result()
         else:
             parser.print_help()
 

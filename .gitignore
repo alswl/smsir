@@ -27,5 +27,5 @@ pip-log.txt
 .mr.developer.cfg
 
 #myself
-data.db
+data/data.db
 tags
