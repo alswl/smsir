@@ -62,8 +62,6 @@ class SmsBackupAndRestoreParser(Parser):
         type = int(type_text)
         if number.find('+86') < 0: # fix number don't has +86
             number = '+86' + number
-        if name is None:
-            name = unicode(number)
         create_at = datetime.fromtimestamp(float(create_at) / 1000)
 
         super(SmsBackupAndRestoreParser, self).save_sms(type,

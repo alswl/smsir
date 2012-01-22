@@ -75,9 +75,6 @@ class Best_message_storer_parser(Parser):
         name = self.name_re.search(meta).group(1) or \
                 self.name_re.search(meta).group(2)
 
-        if name is None:
-            logger.error(meta)
-
         create_at_text = self.create_at_re.search(meta).group(1)
         create_at = datetime.datetime.strptime(
             create_at_text.replace(' am', '').replace(' pm', '').encode('utf-8'),
@@ -93,6 +90,8 @@ class Best_message_storer_parser(Parser):
             type_number = 1
         else:
             raise FormatError()
+        if name == number: # 没有联系人名称，只有电话号码
+            name = None
         if number.find('+86') < 0: # fix number don't has +86
             number = '+86' + number
 
