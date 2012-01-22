@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding=utf-8
 
-# desc: Parser
+# desc: Parser for Best message storer on Symbian
 # author: alswl
 # date: 2011-01-07
 
@@ -96,29 +96,8 @@ class Best_message_storer_parser(Parser):
         if number.find('+86') < 0: # fix number don't has +86
             number = '+86' + number
 
-        contact_phone_items = session.query(Contact, Phone). \
-                filter(Contact.id == Phone.contact_id). \
-                filter(Phone.number == number).all()
-        if len(contact_phone_items) > 0:
-            contact, phone = contact_phone_items[0]
-        else:
-            contact = Contact(name=name)
-            phone = Phone(number)
-            phone.contact = contact
-            contact.adjust_name()
-            session.add(contact)
-            session.commit()
-
-        sms = session.query(Sms).filter_by(number=number,
-                                           create_at=create_at).first()
-        if not sms is None: # 重复的短信
-            raise DuplicateError
-
-        sms = Sms()
-        sms.create_at = create_at
-        sms.number = number
-        sms.phone = phone
-        sms.content = content
-        sms.type = type_number
-        sms.contact = contact
-        self.smses.append(sms)
+        super(Best_message_storer_parser, self).save_sms(type,
+                                                        name,
+                                                        number,
+                                                        content,
+                                                        create_at)

@@ -27,3 +27,4 @@ class Contact(Base):
         # TODO update for first name / last name
         self.name = self.name.replace(' ', '')
         self.name = self.name.replace('!', '')
+        self.name = self.name.replace('！', '')

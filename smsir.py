@@ -11,6 +11,7 @@ from config import Base, session, engine
 from model.sms import Sms
 from model.contact import Contact
 from parser.best_message_storer_parser import Best_message_storer_parser
+from parser.sms_backup_and_restore_parser import SmsBackupAndRestoreParser
 
 logger = logging.getLogger(__name__)
 
@@ -32,23 +33,22 @@ class Smsir(object):
         parser.add_argument('--list-messages', '-l',
                             action='store_true',
                             help='list all messages')
-        parser.add_argument('--import-sms-backup-restore', '-b',
-                            type=argparse.FileType('r'),
-                            metavar='FILE',
-                            help='import messages from SMS Backup & Restore')
         parser.add_argument('--import-best-message-storer', '-B',
                             type=argparse.FileType('r'),
                             metavar='FILE',
                             nargs='+',
                             help='import messages from Best MessageStorer backups')
+        parser.add_argument('--import-sms-backup-and-restore', '-S',
+                            type=argparse.FileType('r'),
+                            metavar='FILE',
+                            nargs='+',
+                            help='import messages from Sms Backup & Restore')
         args = parser.parse_args()
 
         if args.create:
             self.create_all()
         elif args.list_messages:
             self.list_messages()
-        elif args.import_sms_backup_restore != None:
-            pass
         elif args.import_best_message_storer != None:
             for text in args.import_best_message_storer:
                 best_message_storer_parser = Best_message_storer_parser(
@@ -58,6 +58,15 @@ class Smsir(object):
                 session.add_all(smses)
                 session.commit()
                 best_message_storer_parser.print_result()
+        elif not args.import_sms_backup_and_restore is None:
+            for xml in args.import_sms_backup_and_restore:
+                sms_backup_restore_parser = SmsBackupAndRestoreParser(
+                    xml.read().decode('utf-8')
+                    )
+                smses = sms_backup_restore_parser.parse()
+                session.add_all(smses)
+                session.commit()
+                sms_backup_restore_parser.print_result()
         else:
             parser.print_help()
 
