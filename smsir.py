@@ -12,6 +12,7 @@ from model.sms import Sms
 from model.contact import Contact
 from parser.best_message_storer_parser import Best_message_storer_parser
 from parser.sms_backup_and_restore_parser import SmsBackupAndRestoreParser
+from action.update_sms import update_sms
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,9 @@ class Smsir(object):
         parser.add_argument('--list-messages', '-l',
                             action='store_true',
                             help='list all messages')
+        parser.add_argument('--update-contact', '-u',
+                            action='store_true',
+                            help='update sms that contact is none')
         parser.add_argument('--import-best-message-storer', '-B',
                             type=argparse.FileType('r'),
                             metavar='FILE',
@@ -49,6 +53,8 @@ class Smsir(object):
             self.create_all()
         elif args.list_messages:
             self.list_messages()
+        elif args.update_contact:
+            update_sms()
         elif args.import_best_message_storer != None:
             for text in args.import_best_message_storer:
                 best_message_storer_parser = Best_message_storer_parser(
