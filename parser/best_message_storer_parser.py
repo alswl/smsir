@@ -95,7 +95,7 @@ class Best_message_storer_parser(Parser):
         if number.find('+86') < 0: # fix number don't has +86
             number = '+86' + number
 
-        super(Best_message_storer_parser, self).save_sms(type,
+        super(Best_message_storer_parser, self).save_sms(type_number,
                                                         name,
                                                         number,
                                                         content,
