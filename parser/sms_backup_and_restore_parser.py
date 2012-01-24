@@ -56,6 +56,8 @@ class SmsBackupAndRestoreParser(Parser):
         create_at = node.get('date')
         name = node.get('contact_name')
 
+        if name == '(Unknown)':
+            name = None
         if not type_text.isdigit() or \
            not create_at.isdigit():
             raise FormatError
