@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding=utf8
+import sys
 import argparse
 import logging
 
@@ -13,6 +14,7 @@ from model.contact import Contact
 from parser.best_message_storer_parser import Best_message_storer_parser
 from parser.sms_backup_and_restore_parser import SmsBackupAndRestoreParser
 from action.update_sms import update_sms
+from action.merge_contact import merge_contact
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +39,11 @@ class Smsir(object):
         parser.add_argument('--update-contact', '-u',
                             action='store_true',
                             help='update sms that contact is none')
+        parser.add_argument('--merge-contact', '-m',
+                            type=str,
+                            metavar='CONTACT',
+                            nargs=2,
+                            help='merge A contact to B contact')
         parser.add_argument('--import-best-message-storer', '-B',
                             type=argparse.FileType('r'),
                             metavar='FILE',
@@ -55,6 +62,14 @@ class Smsir(object):
             self.list_messages()
         elif args.update_contact:
             update_sms()
+        elif args.merge_contact:
+            try:
+                merge_contact(
+                    args.merge_contact[0].decode(sys.getfilesystemencoding()),
+                    args.merge_contact[1].decode(sys.getfilesystemencoding())
+                    )
+            except ValueError:
+                print 'Error keyword'
         elif args.import_best_message_storer != None:
             for text in args.import_best_message_storer:
                 best_message_storer_parser = Best_message_storer_parser(

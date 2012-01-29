@@ -8,6 +8,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
 
+import sys
+reload(sys)
+sys.setdefaultencoding(sys.getfilesystemencoding()) # for cross-platform
+
 config = yaml.load(open('config.yml', 'r'))
 
 engine = create_engine(config['main']['data'], echo=True) # set data connect string
